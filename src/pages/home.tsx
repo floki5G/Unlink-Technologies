@@ -1,10 +1,11 @@
+import React from "react";
 import { IndexComponent } from "../components/index/index";
 import { PageLayout } from "../features/PageLoyout";
 
 function HomePage() {
   return (
     <>
-      <PageLayout>
+      <PageLayout sideBarText="Add Tutorial" modalText="Add Tutorial">
         <IndexComponent />
       </PageLayout>
     </>

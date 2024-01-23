@@ -2,7 +2,7 @@ import axios from "axios";
 
 const axiosApiCaller = axios.create();
 
-axiosApiCaller.defaults.baseURL = "http://localhost:3000/v1/api";
+axiosApiCaller.defaults.baseURL = "http://localhost:4000/v1/api";
 
 // Request interceptor for API calls
 axiosApiCaller.interceptors.request.use(
