@@ -1,8 +1,4 @@
-import {
-  Outlet,
-  useRoutes,
-  Navigate,
-} from "react-router-dom";
+import { Outlet, useRoutes, Navigate } from "react-router-dom";
 import HomePage from "./pages/home";
 import InfoPage from "./pages/info";
 

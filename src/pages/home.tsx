@@ -1,9 +1,12 @@
 import { IndexComponent } from "../components/index/index";
+import { PageLayout } from "../features/PageLoyout";
 
 function HomePage() {
   return (
     <>
-      <IndexComponent />
+      <PageLayout>
+        <IndexComponent />
+      </PageLayout>
     </>
   );
 }
