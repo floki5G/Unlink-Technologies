@@ -6,3 +6,17 @@ export interface ITutorialls {
   slug: string;
   image_uri: string;
 }
+
+
+export interface IDescription {
+  id: number;
+  description: string;
+  tutorial_id: number;
+name: string;
+}
+export interface ISyllabus {
+  id: number;
+  name: string;
+  tutorial_id: number;
+  description: number[];
+}

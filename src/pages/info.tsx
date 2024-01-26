@@ -3,10 +3,10 @@ import { InfoComponent } from "../components/info";
 import { PageLayout } from "../features/PageLoyout";
 
 function InfoPage() {
-  const [openSidebar, setOpenSidebar] = React.useState(false);
   return (
     <>
-      <PageLayout>
+      <PageLayout sideBarText="Add Tutorial" modalText="Add Tutorial">
+
         <InfoComponent />
       </PageLayout>
     </>

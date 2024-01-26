@@ -1,7 +1,10 @@
+import { InfoTutorials } from "./modules/tutorialsList";
+
 export function InfoComponent() {
+
   return (
     <>
-      <h1>Info</h1>
+    <InfoTutorials/>
     </>
   );
 }

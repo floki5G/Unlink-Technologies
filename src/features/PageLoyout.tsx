@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar";
 import { useAppDispatch } from "../redux/configure-store";
 import { updateIsModalOpen, updateIsSidebarOpen } from "../redux/slices/common";
 

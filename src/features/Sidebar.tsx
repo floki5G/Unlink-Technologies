@@ -1,104 +1,36 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { useLocation } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../redux/configure-store";
+import { updateIsSidebarOpen } from "../redux/slices/common";
 
 type Props = {
+  id: string;
   heading: string;
+  descripiton: string | React.ReactNode;
   children: JSX.Element;
-  actionBtn?: JSX.Element;
-  triggerText?: JSX.Element;
-  id?: string;
-  onCloseSidebar?: boolean;
-  callbackForClose?: () => void;
-  openId?: string;
-  descripiton?: string | React.ReactNode;
-  arrowCss?: string;
-  onClose?: () => void;
 };
 
 export default function Sidebar({
   heading,
   children,
-  triggerText,
-  actionBtn,
   id,
-  onCloseSidebar,
-  callbackForClose,
-  openId,
   descripiton,
-  arrowCss,
-  onClose,
 }: Props) {
-  const location = useLocation();
-  const [open, setOpen] = useState(false);
-
-  // ? Close the sidebare when onCloseSidebar is called
-  useEffect(() => {
-    if (onCloseSidebar) {
-      setOpen(false);
-    }
-
-    if (!open && callbackForClose) {
-      console.log("callbackForClose");
-
-      callbackForClose();
-    }
-  }, [callbackForClose, onCloseSidebar, open]);
-
-  // ? If the query tab contains sign make them auto scroll to the bottom of the page
-  useEffect(() => {
-    // ? Get the url params of tab using location.search
-    const urlParams = new URLSearchParams(location.search);
-
-    const timeout = setTimeout(() => {
-      if (urlParams.get("tab") === "payment-settings") {
-        if (id === "payment-settings-card") {
-          setOpen(true);
-        }
-      }
-    }, 500);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [id, location.search]);
-
+  const dispatch = useAppDispatch()
+  const SelectIsSidebarOpen = useAppSelector(
+    (state) => state.common.isSidebarOpen
+  );
   return (
     <div
-      className={`w-full  ${arrowCss ? arrowCss : "flex justify-center text-black"}`}
+      className={`w-full flex justify-center text-black `}
     >
-      {triggerText ? (
-        <button
-          className="w-full flex justify-center cursor-pointer hover:text-black"
-          id={openId ? openId : undefined}
-          onClick={() => {
-            setOpen(!open);
-          }}
-        >
-          {triggerText}
-        </button>
-      ) : (
-        <button
-          onClick={() => {
-            setOpen(!open);
-          }}
-          id="open-sidebar"
-        >
-          <i className="fa-solid fa-arrow-right "></i>
-        </button>
-      )}
-
-      <Transition.Root show={open} as={Fragment}>
+      <Transition.Root show={SelectIsSidebarOpen} as={Fragment}>
         <Dialog
           as="div"
           className="relative z-10"
           onClose={() => {
-            setOpen(false);
-            if (onClose) {
-              setTimeout(() => {
-                onClose();
-              }, 500);
-            }
+            dispatch(updateIsSidebarOpen(false))
+
           }}
         >
           <Transition.Child
@@ -143,39 +75,35 @@ export default function Sidebar({
                       id={id}
                     >
                       <div className="px-4 sm:px-6">
-                        <div className="flex flex-row justify-between items-center">
-                          <div className="">
-                            <button
-                              type="button"
-                              id="close-sidebar"
-                              className="rounded-md text-gray-300 hover:text-black focus:outline-none focus:ring-2 focus:ring-white"
-                              onClick={() => {
-                                setOpen(false);
-                                if (onClose) {
-                                  setTimeout(() => {
-                                    onClose();
-                                  }, 500);
-                                }
-                              }}
-                            >
-                              <span className=" md:block hidden icon-clear text-2xl md:text-4xl text-black"></span>
-                              <span className=" block md:hidden icon-arrow-left  text-2xl  text-black"></span>
-                            </button>
-                          </div>
+                        <div className=" w-full">
 
-                          <div className="flex flex-col justify-center items-center">
-                            <Dialog.Title className="text-lg md:text-2xl font-bold text-gray-900 w-full text-center">
-                              {heading}
-                            </Dialog.Title>
+
+                          <div className=" mb-4">
+                            <div className="flex justify-between items-center">
+
+                              <Dialog.Title className="text-lg md:text-2xl font-bold text-gray-900 w-full ">
+                                {heading}
+                              </Dialog.Title>
+
+
+                              <button type="button"
+
+                                id="close-sidebar"
+                                onClick={() => {
+                                  dispatch(updateIsSidebarOpen(false))
+                                }}
+                                className="py-3 px-4 flex justify-center items-center h-[2.875rem] w-[2.875rem] text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                X
+                              </button>
+                            </div>
 
                             {descripiton && (
-                              <Dialog.Description className=" text-gray-500 ml-2 text-center text-sm w-full">
+                              <Dialog.Description className=" text-gray-500 ml-2  text-sm w-full">
                                 {descripiton}
                               </Dialog.Description>
                             )}
                           </div>
 
-                          {actionBtn ? actionBtn : <div />}
                         </div>
                       </div>
                       <div className="relative mt-3 flex-1 px-4 sm:px-6">
@@ -184,6 +112,8 @@ export default function Sidebar({
                         </div>
                       </div>
                     </div>
+
+
                   </Dialog.Panel>
                 </Transition.Child>
               </div>
