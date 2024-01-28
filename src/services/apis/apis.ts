@@ -14,7 +14,7 @@ export interface ITutorials {
   is_active: boolean;
   is_disabled: boolean;
 }
-export async function CreateTutorialApi(payload: ITutorials) {
+export async function PostCreateTutorialApi(payload: ITutorials) {
   try {
     const response = await axiosApiCaller.post(`/tutorials/upsert`, payload);
     return response.data;
@@ -23,6 +23,20 @@ export async function CreateTutorialApi(payload: ITutorials) {
   }
 }
 
+export interface ICategory {
+  id?: number;
+  name: string;
+  is_active: boolean;
+  is_disabled: boolean;
+}
+export async function PostCreateCategoryApi(payload: ICategory) {
+  try {
+    const response = await axiosApiCaller.post(`/categories/upsert`, payload);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
 export async function GetSyllabusTutorialListApi(id: string) {
   try {
     const response = await axiosApiCaller.get(`/info/${id}`);

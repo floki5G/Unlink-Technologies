@@ -1,6 +1,7 @@
 import { useState } from "react";
 import {
-  CreateTutorialApi,
+  PostCreateCategoryApi,
+  PostCreateTutorialApi,
   postTutorialCategoryApi,
 } from "../../../services/apis/apis";
 import Sidebar from "../../../features/Sidebar";
@@ -10,7 +11,10 @@ import { MdModeEdit } from "react-icons/md";
 import { updateIsModalOpen } from "../../../redux/slices/common";
 import { useAppDispatch, useAppSelector } from "../../../redux/configure-store";
 import { Cards } from "../../../features/Cards";
-import { updateTutorialById } from "../../../redux/slices/details";
+import {
+  updateAddNewByProperty,
+  updateTutorialById,
+} from "../../../redux/slices/details";
 export function Tutorials() {
   const dispatch = useAppDispatch();
 
@@ -18,8 +22,9 @@ export function Tutorials() {
   const [tutorialsName, setTutorialsName] = useState("");
   const [tutorialsId, setTutorialsId] = useState<null | number>(null);
   const selectSyncData = useAppSelector((state) => state.details);
+  const [categoryName, setCategoryName] = useState("");
 
-  async function handelCreateTutorialls(
+  async function handelCreateTutorial(
     events: React.FormEvent<HTMLFormElement>,
   ) {
     events.preventDefault();
@@ -30,18 +35,29 @@ export function Tutorials() {
         is_active: true,
         is_disabled: false,
       };
-      const response = await CreateTutorialApi(payload);
+      const response = await PostCreateTutorialApi(payload);
       if (response?.status === "success") {
         toast.success(response?.message ?? "successfully created tutorials");
+        dispatch(
+          updateAddNewByProperty({
+            data: {
+              id: response?.data?.id,
+              name: response?.data?.name,
+              categories: [],
+            },
+            property: "tutorials",
+          }),
+        );
       } else {
         toast.error(
           response?.message ??
             "something went wrong please try again later or contact admin",
         );
-        console.log(response);
       }
     } catch (error) {
-      console.log(error);
+      toast.error(
+        "something went wrong please try again later or contact admin",
+      );
     } finally {
       setLoading(false);
     }
@@ -103,10 +119,48 @@ export function Tutorials() {
       }
     }
   }
+  async function handelCreateCategory(events: React.FormEvent<HTMLFormElement>){
+    events.preventDefault();
+    try {
+      setLoading(true);
+      const payload = {
+        name: categoryName,
+        is_active: true,
+        is_disabled: false,
+      };
+      const response = await PostCreateCategoryApi(payload);
+      if (response?.status === "success") {
+        toast.success(response?.message ?? "successfully created tutorials");
+        dispatch(
+          updateAddNewByProperty({
+            data: {
+              id: response?.data?.id,
+              name: response?.data?.name,
+              categories: [],
+            },
+            property: "categories",
+          }),
+        );
+      } else {
+        toast.error(
+          response?.message ??
+            "something went wrong please try again later or contact admin",
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(
+          "something went wrong please try again later or contact admin",
+      );
+
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <div className="">
       <Sidebar id="tutorialls" heading="Tutorials" descripiton="Tutorials">
-        <form className="max-w-md " onSubmit={handelCreateTutorialls}>
+        <form className="max-w-md " onSubmit={handelCreateTutorial}>
           <div className="relative z-0 w-full mb-5 group">
             <input
               value={tutorialsName}
@@ -150,11 +204,11 @@ export function Tutorials() {
         descripiton="add and edit categories"
       >
         <div>
-          <form className="max-w-md " onSubmit={handelCreateTutorialls}>
+          <form className="max-w-md " onSubmit={handelCreateCategory}>
             <div className="relative z-0 w-full mb-5 group">
               <input
-                value={tutorialsName}
-                onChange={(e) => setTutorialsName(e.target.value)}
+                value={categoryName}
+                onChange={(e) => setCategoryName(e.target.value)}
                 type="text"
                 name="tutorials_name"
                 id="tutorials_name"
@@ -170,11 +224,9 @@ export function Tutorials() {
             </div>
 
             <button
-              type="button"
+            type="submit"
               className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-              onClick={() => {
-                dispatch(updateIsModalOpen(false));
-              }}
+        
             >
               {loading ? (
                 <div>

@@ -23,6 +23,15 @@ export const DetailsSlice = createSlice({
     updateDetailsStatus: (_, action) => {
       return action.payload;
     },
+
+    // ? add new data by property
+    updateAddNewByProperty: (state, action) => {
+      const { property, data } = action.payload;
+      if (property in state) {
+        state[property as keyof typeof state].push(data);
+      }
+    },
+
     // ? update specific category data by id
     updateCategoryById: (state, action) => {
       const { id, data } = action.payload;
@@ -89,6 +98,7 @@ export const DetailsSlice = createSlice({
 
 // ? export action reducers
 export const {
+  updateAddNewByProperty,
   updateDetailsStatus,
   updateCategoryById,
   updateDescriptionById,
