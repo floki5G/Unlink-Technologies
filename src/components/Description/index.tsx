@@ -26,8 +26,8 @@ export function Description() {
       setLoading(true);
       const payload = {
         id: id ? Number(id) : undefined,
-        name: content,
-        description: name,
+        name: name,
+        description:  content,
         is_active: true,
         is_disabled: false,
       };
