@@ -54,8 +54,17 @@ export async function PostDescriptionUpsertApi(payload: IDescription) {
     console.log(error);
   }
 }
+export interface ISyllabusPayload {
+  id?: number;
+  name: string;
+  description: string;
+  is_primary: boolean;
+  slug?: string;
+  is_active: boolean;
+  is_disabled: boolean;
+}
 
-export async function PostSyllabusApi(payload: ISyllabus) {
+export async function PostSyllabusUpsertApi(payload: ISyllabusPayload) {
   try {
     const response = await axiosApiCaller.post(`/syllabus/upsert`, payload);
     return response.data;

@@ -1,75 +1,92 @@
-import { useEffect, useState } from "react";
-import Sidebar from "../../../features/Sidebar";
-import { GetAllSyllabusApi } from "../../../services/apis/apis";
+import { useState } from "react";
 import { toast } from "react-toastify";
-import { ISyllabus } from "../../../types";
 import { InputCheckbox } from "../../../features/inputCheckbox";
+import { PostSyllabusUpsertApi } from "../../../services/apis/apis";
 
 export function AddSyllabus() {
-  const [syllabusList, setSyllabusList] = useState<ISyllabus[]>([]);
-  const [checkboxValue, setCheckboxValue] = useState<number>(0);
+  const [syllabusName, setSyllabusName] = useState<string>("");
+  const [syllabusDescription, setSyllabusDescription] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  useEffect(() => {
-    async function fetchSyllabus() {
-      const response = await GetAllSyllabusApi();
-      console.log(response.data);
-      if (response?.status === "success") {
-        toast.success("Syllabus fetched");
-        setSyllabusList(response.data);
-      }
-    }
-    fetchSyllabus();
-  }, []);
+  const [checkboxValue, setCheckboxValue] = useState<number>(0);
 
   async function handleCreate() {
     try {
       setLoading(true);
+
+      const payload = {
+        name: syllabusName,
+        description: syllabusDescription,
+        is_active: true,
+        is_disabled: false,
+        is_primary: Boolean(checkboxValue),
+      };
+      const res = await PostSyllabusUpsertApi(payload);
+      console.log(res);
+      if (res.status === "success") {
+        toast.success("syllabus created successfully");
+      }
     } catch (error) {
-      toast.error("Something went wrong");
-      setLoading(false);
+      console.log(error);
+      toast.error("something went wrong please try again later ");
     } finally {
       setLoading(false);
     }
   }
-
   return (
     <>
-      <Sidebar
-        id="tutorialls"
-        heading="Add Syllabus"
-        descripiton={"add syllabus to your tutorials"}
-      >
+      <div>
+        <input
+          value={syllabusName}
+          onChange={(e) => setSyllabusName(e.target.value)}
+          type="text"
+          name="tutorials_name"
+          id="tutorials_name"
+          placeholder="Syllabus Name"
+          className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+          required
+        />
         <div>
-          <button
-            type="button"
-            className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-            onClick={handleCreate}
+          <label
+            htmlFor="message"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            {loading ? (
-              <div>
-                <span
-                  className="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white rounded-full"
-                  role="status"
-                  aria-label="loading"
-                ></span>
-                Loading
-              </div>
-            ) : (
-              "Create"
-            )}
-          </button>
-          {syllabusList.map((item, index) => (
-            <div key={`add-syllabus-${item.name}-${index}`}>
-              <InputCheckbox
-                key={item.id}
-                label={item.name}
-                value={checkboxValue}
-                setValue={setCheckboxValue}
-              />
-            </div>
-          ))}
+            syllabus Description
+          </label>
+          <textarea
+            value={syllabusDescription}
+            onChange={(e) => setSyllabusDescription(e.target.value)}
+            id="message"
+            rows={4}
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Write your thoughts here..."
+          ></textarea>
         </div>
-      </Sidebar>
+
+        <InputCheckbox
+          key={`add-syllabus-checkbox-primary`}
+          label={"is this syllabus is primary course?"}
+          value={checkboxValue}
+          setValue={setCheckboxValue}
+        />
+        <button
+          type="button"
+          className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          onClick={handleCreate}
+        >
+          {loading ? (
+            <div>
+              <span
+                className="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white rounded-full"
+                role="status"
+                aria-label="loading"
+              ></span>
+              Loading
+            </div>
+          ) : (
+            "Create"
+          )}
+        </button>
+      </div>
     </>
   );
 }

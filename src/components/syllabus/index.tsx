@@ -1,102 +1,129 @@
-import { useState } from "react";
-import { PostSyllabusApi } from "../../services/apis/apis";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { Switch } from "@headlessui/react";
+import { InputCheckbox } from "../../features/inputCheckbox";
+import { PostSyllabusUpsertApi } from "../../services/apis/apis";
+import { useParams } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../redux/configure-store";
+import {
+  updateAddNewByProperty,
+  updateSyllabusById,
+} from "../../redux/slices/details";
 
 export function SyllabusComponent() {
-  const [name, setName] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
+  const dispatch = useAppDispatch();
+  const selectSyncData = useAppSelector((state) => state.details);
+  const [syllabusName, setSyllabusName] = useState<string>("");
+  const [syllabusDescription, setSyllabusDescription] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [enabled, setEnabled] = useState(false);
+  const [checkboxValue, setCheckboxValue] = useState<number>(0);
+  const { id } = useParams();
+  useEffect(() => {
+    if (!id) return;
+    const syllabusDetails = selectSyncData.syllabus.filter(
+      (syllabus) => syllabus?.id === Number(id),
+    );
+    if (!syllabusDetails.length) return;
+    setSyllabusName(syllabusDetails[0].name);
+    setSyllabusDescription(syllabusDetails[0].description);
+    setCheckboxValue(Number(syllabusDetails[0].is_primary));
+  }, [id, selectSyncData.syllabus]);
 
-  async function handelSyllabus() {
+  async function handleCreate() {
     try {
       setLoading(true);
 
       const payload = {
-        name: name,
-        description: description,
+        id: id ? Number(id) : undefined,
+        name: syllabusName,
+        description: syllabusDescription,
         is_active: true,
         is_disabled: false,
-        is_primary: enabled,
+        is_primary: Boolean(checkboxValue),
       };
-
-      const res = await PostSyllabusApi(payload);
-
+      const res = await PostSyllabusUpsertApi(payload);
+      console.log(res);
       if (res.status === "success") {
-        console.log(res.data);
-        toast.success("Description Created");
-      } else {
-        toast.error("something went wrong");
+        toast.success("syllabus created successfully");
+        if (id) {
+          dispatch(
+            updateSyllabusById({
+              id: res.data.id,
+              data: res.data,
+            }),
+          );
+        } else {
+          dispatch(
+            updateAddNewByProperty({
+              property: "syllabus",
+              data: res.data,
+            }),
+          );
+        }
       }
     } catch (error) {
       console.log(error);
+      toast.error("something went wrong please try again later ");
     } finally {
       setLoading(false);
-      console.log("done");
     }
   }
   return (
     <>
-      <input
-        className="peer py-3 pe-0 ps-8 block w-full bg-transparent border-t-transparent border-b-2 border-x-transparent border-b-gray-200 text-sm focus:border-t-transparent focus:border-x-transparent focus:border-b-blue-500 focus:ring-0 disabled:opacity-50 disabled:pointer-events-none dark:border-b-gray-700 dark:text-gray-400 dark:focus:ring-gray-600 dark:focus:border-b-gray-600"
-        type="text"
-        value={name}
-        placeholder="name"
-        onChange={(e) => setName(e.target.value)}
-      />
-
-      <div className="px-4 py-2 bg-white rounded-t-lg dark:bg-gray-800">
-        <label htmlFor="description" className="sr-only">
-          syllabus desc
-        </label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          id="description"
-          rows={4}
-          className="w-full text-sm text-gray-900 bg-white border-0 dark:bg-gray-800 focus:ring-0 dark:text-white dark:placeholder-gray-400"
-          placeholder="Write a description..."
+      <div>
+        <input
+          value={syllabusName}
+          onChange={(e) => setSyllabusName(e.target.value)}
+          type="text"
+          name="tutorials_name"
+          id="tutorials_name"
+          placeholder="Syllabus Name"
+          className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
           required
-        ></textarea>
-      </div>
-      <Switch.Group>
-        <div className="flex items-center">
-          <Switch.Label className="mr-4"> is primary</Switch.Label>
-          <Switch
-            checked={enabled}
-            onChange={setEnabled}
-            className={`${
-              enabled ? "bg-blue-600" : "bg-gray-200"
-            } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+        />
+        <div>
+          <label
+            htmlFor="message"
+            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
           >
-            <span
-              className={`${
-                enabled ? "translate-x-6" : "translate-x-1"
-              } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
-            />
-          </Switch>
+            syllabus Description
+          </label>
+          <textarea
+            value={syllabusDescription}
+            onChange={(e) => setSyllabusDescription(e.target.value)}
+            id="message"
+            rows={4}
+            className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Write your thoughts here..."
+          ></textarea>
         </div>
-      </Switch.Group>
 
-      <button
-        type="button"
-        className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-        onClick={handelSyllabus}
-      >
-        {loading ? (
-          <div>
-            <span
-              className="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white rounded-full"
-              role="status"
-              aria-label="loading"
-            ></span>
-            Loading
-          </div>
-        ) : (
-          "Create"
-        )}
-      </button>
+        <InputCheckbox
+          key={`add-syllabus-checkbox-primary`}
+          label={"is this syllabus is primary course?"}
+          value={checkboxValue}
+          setValue={setCheckboxValue}
+        />
+        <button
+          type="button"
+          className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          onClick={handleCreate}
+        >
+          {loading ? (
+            <div>
+              <span
+                className="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white rounded-full"
+                role="status"
+                aria-label="loading"
+              ></span>
+              Loading
+            </div>
+          ) : id ? (
+            "Update"
+          ) : (
+            "Create"
+          )}
+        </button>
+      </div>
     </>
   );
 }

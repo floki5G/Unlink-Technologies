@@ -71,10 +71,8 @@ export function Tutorials() {
     if (selectTutorials?.length) {
       const tutorial = selectTutorials[0];
 
-      if (tutorial?.categories.includes(id)) {
-        const newCategories = tutorial?.categories.filter(
-          (item) => item !== id,
-        );
+      if (tutorial?.c_list.includes(id)) {
+        const newCategories = tutorial?.c_list.filter((item) => item !== id);
         const payload = {
           display_order: 1,
           category_id: id,
@@ -106,7 +104,7 @@ export function Tutorials() {
         const response = await postTutorialCategoryApi(payload);
         if (response.status === "success") {
           toast.success(response?.message ?? "successfully created tutorials");
-          const newCategories = [...tutorial?.categories, id];
+          const newCategories = [...tutorial?.c_list, id];
           dispatch(
             updateTutorialById({
               id: tutorialsId,
@@ -119,7 +117,9 @@ export function Tutorials() {
       }
     }
   }
-  async function handelCreateCategory(events: React.FormEvent<HTMLFormElement>){
+  async function handelCreateCategory(
+    events: React.FormEvent<HTMLFormElement>,
+  ) {
     events.preventDefault();
     try {
       setLoading(true);
@@ -150,9 +150,8 @@ export function Tutorials() {
     } catch (error) {
       console.log(error);
       toast.error(
-          "something went wrong please try again later or contact admin",
+        "something went wrong please try again later or contact admin",
       );
-
     } finally {
       setLoading(false);
     }
@@ -224,9 +223,8 @@ export function Tutorials() {
             </div>
 
             <button
-            type="submit"
+              type="submit"
               className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-        
             >
               {loading ? (
                 <div>
@@ -253,7 +251,7 @@ export function Tutorials() {
                     checked={
                       selectSyncData?.tutorials
                         ?.find((tutorial) => tutorial?.id === tutorialsId)
-                        ?.categories.includes(item?.id) ?? false
+                        ?.c_list.includes(item?.id) ?? false
                     }
                     id={`hs-checkbox-delete-${item?.id}`}
                     name={`hs-checkbox-delete-${item?.id}`}
