@@ -40,14 +40,14 @@ export function PageLayout({
       main: () => <h1>Description</h1>,
     },
     {
-      icon: <CiSettings />,
-      path: "/settings",
-      main: () => <h1>Settings</h1>,
-    },
-    {
       icon: <CiBookmarkCheck />,
       path: "/syllabus",
       main: () => <h1>Syllabus</h1>,
+    },
+    {
+      icon: <CiSettings />,
+      path: "/settings",
+      main: () => <h1>Settings</h1>,
     },
   ];
   return (

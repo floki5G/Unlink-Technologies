@@ -41,7 +41,6 @@ export function SyllabusComponent() {
         is_primary: Boolean(checkboxValue),
       };
       const res = await PostSyllabusUpsertApi(payload);
-      console.log(res);
       if (res.status === "success") {
         toast.success("syllabus created successfully");
         if (id) {
@@ -61,7 +60,6 @@ export function SyllabusComponent() {
         }
       }
     } catch (error) {
-      console.log(error);
       toast.error("something went wrong please try again later ");
     } finally {
       setLoading(false);

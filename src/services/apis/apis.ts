@@ -111,3 +111,42 @@ export async function postTutorialCategoryApi(payload: ITutorialsCategory) {
     console.log(error);
   }
 }
+export interface ISyllabusList {
+  id?: number;
+  display_order: number;
+  tutorial_id: number;
+  syllabus_id: number;
+  is_active: boolean;
+  is_disabled: boolean;
+}
+
+export async function postTutorialSyllabusApi(payload: ISyllabusList) {
+  try {
+    const response = await axiosApiCaller.post(
+      `/tutorials_syllaus/upsert`,
+      payload,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export interface IDescriptionList {
+  id?: number;
+  syllabus_id: number;
+  description_id: number;
+  is_active: boolean;
+  is_disabled: boolean;
+}
+export async function postDescriptionListApi(payload: IDescriptionList) {
+  try {
+    const response = await axiosApiCaller.post(
+      `/syllabus_description/upsert`,
+      payload,
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+}

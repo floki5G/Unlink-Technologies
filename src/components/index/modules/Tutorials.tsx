@@ -88,7 +88,7 @@ export function Tutorials() {
             updateTutorialById({
               id: tutorialsId,
               data: {
-                categories: newCategories,
+                c_list: newCategories,
               },
             }),
           );
@@ -109,7 +109,7 @@ export function Tutorials() {
             updateTutorialById({
               id: tutorialsId,
               data: {
-                categories: newCategories,
+                c_list: newCategories,
               },
             }),
           );

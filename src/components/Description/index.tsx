@@ -27,7 +27,7 @@ export function Description() {
       const payload = {
         id: id ? Number(id) : undefined,
         name: name,
-        description:  content,
+        description: content,
         is_active: true,
         is_disabled: false,
       };
