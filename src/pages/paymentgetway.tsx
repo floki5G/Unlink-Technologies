@@ -1,11 +1,10 @@
-import { Description } from "../components/Description";
 import { PageLayout } from "../features/PageLoyout";
 
-export function DescriptionPage() {
+export function PaymentGetway() {
   return (
     <>
       <PageLayout sideBarText="Add Tutorial" modalText="Add Tutorial">
-        <Description />
+        <h1>Payment Getway</h1>
       </PageLayout>
     </>
   );

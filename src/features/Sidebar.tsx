@@ -10,27 +10,19 @@ type Props = {
   children: JSX.Element;
 };
 
-export default function Sidebar({
-  heading,
-  children,
-  id,
-  descripiton,
-}: Props) {
-  const dispatch = useAppDispatch()
+export default function Sidebar({ heading, children, id, descripiton }: Props) {
+  const dispatch = useAppDispatch();
   const SelectIsSidebarOpen = useAppSelector(
-    (state) => state.common.isSidebarOpen
+    (state) => state.common.isSidebarOpen,
   );
   return (
-    <div
-      className={`w-full flex justify-center text-black `}
-    >
+    <div className={`w-full flex justify-center text-black `}>
       <Transition.Root show={SelectIsSidebarOpen} as={Fragment}>
         <Dialog
           as="div"
           className="relative z-10"
           onClose={() => {
-            dispatch(updateIsSidebarOpen(false))
-
+            dispatch(updateIsSidebarOpen(false));
           }}
         >
           <Transition.Child
@@ -76,24 +68,34 @@ export default function Sidebar({
                     >
                       <div className="px-4 sm:px-6">
                         <div className=" w-full">
-
-
                           <div className=" mb-4">
                             <div className="flex justify-between items-center">
-
                               <Dialog.Title className="text-lg md:text-2xl font-bold text-gray-900 w-full ">
                                 {heading}
                               </Dialog.Title>
-
-
-                              <button type="button"
-
-                                id="close-sidebar"
+                              <button
                                 onClick={() => {
-                                  dispatch(updateIsSidebarOpen(false))
+                                  dispatch(updateIsSidebarOpen(false));
                                 }}
-                                className="py-3 px-4 flex justify-center items-center h-[2.875rem] w-[2.875rem] text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                X
+                                type="button"
+                                className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                              >
+                                <span className="sr-only">Close menu</span>
+                                <svg
+                                  className="h-6 w-6"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"
+                                  />
+                                </svg>
                               </button>
                             </div>
 
@@ -103,17 +105,15 @@ export default function Sidebar({
                               </Dialog.Description>
                             )}
                           </div>
-
                         </div>
                       </div>
+                      <hr className="border-gray-200" />
                       <div className="relative mt-3 flex-1 px-4 sm:px-6">
                         <div className="absolute inset-0 px-4 pb-3 sm:px-6">
                           {children}
                         </div>
                       </div>
                     </div>
-
-
                   </Dialog.Panel>
                 </Transition.Child>
               </div>

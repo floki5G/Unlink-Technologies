@@ -1,11 +1,10 @@
-import { Description } from "../components/Description";
 import { PageLayout } from "../features/PageLoyout";
 
-export function DescriptionPage() {
+export function SocialMedia() {
   return (
     <>
       <PageLayout sideBarText="Add Tutorial" modalText="Add Tutorial">
-        <Description />
+        <h1>Socail Media</h1>
       </PageLayout>
     </>
   );

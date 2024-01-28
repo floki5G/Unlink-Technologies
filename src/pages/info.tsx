@@ -5,8 +5,7 @@ import { PageLayout } from "../features/PageLoyout";
 function InfoPage() {
   return (
     <>
-      <PageLayout sideBarText="Add Tutorial" modalText="Add Tutorial">
-
+      <PageLayout sideBarText="Add syllabus" modalText="Add Tutorial">
         <InfoComponent />
       </PageLayout>
     </>

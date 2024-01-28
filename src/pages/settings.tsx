@@ -1,11 +1,11 @@
-import { Description } from "../components/Description";
+import { SettingComponent } from "../components/Setting";
 import { PageLayout } from "../features/PageLoyout";
 
-export function DescriptionPage() {
+export function SettingPage() {
   return (
     <>
       <PageLayout sideBarText="Add Tutorial" modalText="Add Tutorial">
-        <Description />
+        <SettingComponent />
       </PageLayout>
     </>
   );
