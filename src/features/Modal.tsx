@@ -63,14 +63,12 @@ export default function Modal({ heading, children, id, descripiton }: Props) {
                     focus:ring-2
                     focus:ring-offset-2
                     focus:ring-blue-500
-                    dark:focus:ring-offset-gray-800
-                    dark:focus:ring-white
+                   
                     rounded-md
                     p-2
                     transition
                     duration-300
                     hover:bg-gray-100
-                    dark:hover:bg-gray-700
                     "
                       onClick={closeModal}
                     >
@@ -78,7 +76,7 @@ export default function Modal({ heading, children, id, descripiton }: Props) {
                     </button>
                   </div>
 
-                  <hr className="border-gray-800 dark:border-white my-2" />
+                  <hr className="border-gray-800 my-2" />
 
                   <div className="mt-6">{children}</div>
                 </Dialog.Panel>
