@@ -214,7 +214,7 @@ export function PageLayout({
           style={{
             boxShadow: "rgba(0, 0, 0, 0.1) 5px 5px 50px",
           }}
-          className=" w-full h-full xl:h-[90vh]  xl:w-[82%] xl:rounded-xl flex flex-col lg:flex-row bg-white"
+          className=" w-full h-full xl:h-[90vh] xl:w-[82%] xl:rounded-xl flex flex-col lg:flex-row bg-white"
         >
           <div className=" w-full lg:w-1/5 hidden lg:block px-8">
             <div className=" py-10 px-2  max-w-64">
@@ -272,7 +272,7 @@ export function PageLayout({
               backgroundPosition: "center",
               objectFit: "cover",
             }}
-            className="lg:w-4/5 w-full h-full  overflow-auto py-4"
+            className="lg:w-4/5 w-full h-full px-4 lg:px-0 overflow-auto py-4"
           >
             <div className=" flex justify-between items-center p-6 lg:hidden">
               <div className="max-w-64">
